@@ -3,6 +3,9 @@ set -e
 
 DEFAULT_DESTINATION="pacman-venv"
 
+ACTIVATION_DIRECTORY="$(dirname "${0}")/activation"
+SHIMS_DIRECTORY="$(dirname "${0}")/shims"
+
 create() {
     destination="${1}"
     full_dest="${PWD}/${destination}"
@@ -18,11 +21,11 @@ create() {
     sudo pacman --root "${full_dest}" -Sy pacman --noconfirm
 
     # Add the activation script
-    sudo cp "$(dirname "${0}")/activation/pacman-venv-activate.bash" "${full_dest}/bin/pacman-venv-activate"
+    sudo cp "${ACTIVATION_DIRECTORY}/pacman-venv-activate.bash" "${full_dest}/bin/pacman-venv-activate"
 
     # Add the necessary package manager executables to pass the --root argument to pacman
-    cp "$(dirname "${0}")/shims/pacman" "${full_dest}/.pacman-venv-pacman"
-    cp "$(dirname "${0}")/shims/yay" "${full_dest}/.pacman-venv-yay"
+    cp "${SHIMS_DIRECTORY}/pacman" "${full_dest}/.pacman-venv-pacman"
+    cp "${SHIMS_DIRECTORY}/yay" "${full_dest}/.pacman-venv-yay"
 
     # Add the .gitignore file so the virtual environment doesn't show up in git repositories
     printf "# Created automatically by pacman-venv\n*\n" > "${full_dest}/.gitignore"
@@ -30,22 +33,12 @@ create() {
     echo "Successfully created pacman virtual environment at ${destination}"
 }
 
-command="${1}"
+destination="${DEFAULT_DESTINATION}"
+[[ "${1}" ]] && destination="${1}"
 
-case "${command}" in
-create )
-    destination="${DEFAULT_DESTINATION}"
-    [[ "${2}" ]] && destination="${2}"
-
-    if [[ -d "${PWD}/${destination}" ]] || [[ -f "${PWD}/${destination}" ]]; then
-        echo "${destination} already exists!"
-        exit 1
-    fi
-
-    create "${destination}"
-    ;;
-* )
-    echo "Command not found: ${command}"
+if [[ -d "${PWD}/${destination}" ]] || [[ -f "${PWD}/${destination}" ]]; then
+    echo "Destination '${destination}' already exists!"
     exit 1
-    ;;
-esac
+fi
+
+create "${destination}"

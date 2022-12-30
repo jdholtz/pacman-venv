@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -e
+
+create() {
+    destination="${1}"
+    full_dest="${PWD}/${destination}"
+    echo "Creating pacman virtual environment in ${destination}"
+
+    # Make the pacman directory for pacman to install databases in
+    mkdir -p "${full_dest}/var/lib/pacman"
+
+    echo "Installing base environment"
+
+    # Install pacman and its dependencies. The entire base system is not needed as
+    # that will install packages not necessary for the virtual environment.
+    sudo pacman --root "${full_dest}" -Sy pacman --noconfirm
+
+    # Add the activation script
+    sudo cp "$(dirname "${0}")/activation/pacman-venv-activate.bash" "${full_dest}/bin/pacman-venv-activate"
+
+    # Add the necessary package manager executables to pass the --root argument to pacman
+    cp "$(dirname "${0}")/shims/pacman" "${full_dest}/.pacman-venv-pacman"
+    cp "$(dirname "${0}")/shims/yay" "${full_dest}/.pacman-venv-yay"
+
+    echo "Successfully created pacman virtual environment at ${destination}"
+}
+
+command="${1}"
+
+case "${command}" in
+create )
+    destination="${2}"
+    if [[ -z "${destination}" ]]; then
+        echo "You must specify the destination directory for 'pacman-venv create'"
+        exit
+    elif [[ -d "${PWD}/${destination}" ]]; then
+        echo "Directory ${destination} already exists!"
+        exit
+    fi
+
+    create "${destination}"
+    ;;
+* )
+    echo "Command not found: ${command}"
+    exit
+    ;;
+esac

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+_pacman() {
+    # Override pacman to execute with the root flag
+    pacman --root "${_PACMAN_VENV}" "$@"
+}
+
+_pacman "$@"

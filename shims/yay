@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+_yay() {
+    args=("$@")
+
+    # When yay has the --root flag passed in, it will exit
+    # if no other arguments are provided. Therefore, add the
+    # default arguments when no arguments are passed by the user.
+    if [[ -z "${args[*]}" ]]; then
+        args="-Syu"
+    fi
+
+    # Override yay to execute with the root flag
+    yay --root "${_PACMAN_VENV}" "${args[@]}"
+}
+
+_yay "$@"

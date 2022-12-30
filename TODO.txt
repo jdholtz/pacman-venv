@@ -1,8 +1,7 @@
-- Add default name for directory creation
 - Add all directories to PATH with subscript of virutal environment
 - Copy makepkg and pacman config to virtual environment
     - Add flags to make copying optional, but default to true
-- Add better detection for if virtual environment already exists
+- Add --clear flag to remove everything in directory before creation
 - Add interactive flag when installing virtual environment
 - Send usage when command isn't found
 - Usage flag (--help)
@@ -12,3 +11,4 @@
 - Add README
 - Add man page
 - Add AUR package
+- Add logging and error messages

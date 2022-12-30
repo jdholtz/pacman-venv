@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
+DEFAULT_DESTINATION="pacman-venv"
+
 create() {
     destination="${1}"
     full_dest="${PWD}/${destination}"
@@ -32,19 +34,18 @@ command="${1}"
 
 case "${command}" in
 create )
-    destination="${2}"
-    if [[ -z "${destination}" ]]; then
-        echo "You must specify the destination directory for 'pacman-venv create'"
-        exit
-    elif [[ -d "${PWD}/${destination}" ]]; then
-        echo "Directory ${destination} already exists!"
-        exit
+    destination="${DEFAULT_DESTINATION}"
+    [[ "${2}" ]] && destination="${2}"
+
+    if [[ -d "${PWD}/${destination}" ]] || [[ -f "${PWD}/${destination}" ]]; then
+        echo "${destination} already exists!"
+        exit 1
     fi
 
     create "${destination}"
     ;;
 * )
     echo "Command not found: ${command}"
-    exit
+    exit 1
     ;;
 esac

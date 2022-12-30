@@ -8,7 +8,6 @@
 - Usage flag (--help)
 - Version flag
 - Colored and pretty output
-- Add .gitignore in virtual environment
 - Add support for other shells (fish, zsh, etc.)
 - Add README
 - Add man page

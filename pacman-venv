@@ -22,6 +22,9 @@ create() {
     cp "$(dirname "${0}")/shims/pacman" "${full_dest}/.pacman-venv-pacman"
     cp "$(dirname "${0}")/shims/yay" "${full_dest}/.pacman-venv-yay"
 
+    # Add the .gitignore file so the virtual environment doesn't show up in git repositories
+    printf "# Created automatically by pacman-venv\n*\n" > "${full_dest}/.gitignore"
+
     echo "Successfully created pacman virtual environment at ${destination}"
 }
 

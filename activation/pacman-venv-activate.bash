@@ -42,6 +42,23 @@ deactivate() {
     exit
 }
 
+# Prepend the pacman virtual environment directory to every
+# directory in PATH. Then, add the new path created to the
+# beginning of PATH. This ensures all paths are looked at in
+# the virtual environment before the system.
+create_path() {
+    # Split the PATH variable into an array
+    IFS=":" read -r -a path_array <<< "${PATH}"
+
+    # Prepend the PACMAN VENV to every directory in PATH
+    local new_path="${PATH}"
+    for path in "${path_array[@]}"; do
+        new_path="${_PACMAN_VENV}${path}:${new_path}"
+    done
+
+    echo "${new_path}"
+}
+
 # Store all the old values of the variables
 _PACMAN_VENV_OLD_PATH="${PATH}"
 _PACMAN_VENV_OLD_PS1="${PS1}"
@@ -56,8 +73,9 @@ export _PACMAN_VENV
 
 # Set all the needed values for the virtual environment
 export LD_LIBRARY_PATH="${_PACMAN_VENV}/lib:${LD_LIBRARY_PATH}"
-export PATH="${_PACMAN_VENV}/bin:${PATH}"
+PATH="$(create_path)"
 PS1="[$(basename "${_PACMAN_VENV}")] ${PS1}"
+export PATH
 export PS1
 
 # Makepkg uses this variable to execute its Pacman command.

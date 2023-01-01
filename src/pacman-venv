@@ -3,18 +3,22 @@ set -e
 
 DEFAULT_DESTINATION="pacman-venv"
 
-ACTIVATION_DIRECTORY="$(dirname "${0}")/activation"
-SHIMS_DIRECTORY="$(dirname "${0}")/shims"
+CURR_DIR="$(dirname "${0}")"
+ACTIVATION_DIRECTORY="${CURR_DIR}/activation"
+SHIMS_DIRECTORY="${CURR_DIR}/shims"
+
+# Import message helper functions
+source "${CURR_DIR}/output/messages.sh"
 
 create() {
     destination="${1}"
     full_dest="${PWD}/${destination}"
-    echo "Creating pacman virtual environment in ${destination}"
+    info "Creating pacman virtual environment in ${destination}"
 
     # Make the pacman directory for pacman to install databases in
     mkdir -p "${full_dest}/var/lib/pacman"
 
-    echo "Installing base environment"
+    info "Installing base environment"
 
     # Install pacman and its dependencies. The entire base system is not needed as
     # that will install packages not necessary for the virtual environment.
@@ -30,14 +34,14 @@ create() {
     # Add the .gitignore file so the virtual environment doesn't show up in git repositories
     printf "# Created automatically by pacman-venv\n*\n" > "${full_dest}/.gitignore"
 
-    echo "Successfully created pacman virtual environment at ${destination}"
+    info "Successfully created pacman virtual environment at ${destination}"
 }
 
 destination="${DEFAULT_DESTINATION}"
 [[ "${1}" ]] && destination="${1}"
 
 if [[ -d "${PWD}/${destination}" ]] || [[ -f "${PWD}/${destination}" ]]; then
-    echo "Destination '${destination}' already exists!"
+    error "Destination '${destination}' already exists!"
     exit 1
 fi
 

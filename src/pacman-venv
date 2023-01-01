@@ -10,35 +10,54 @@ SHIMS_DIRECTORY="${CURR_DIR}/shims"
 # Import message helper functions
 source "${CURR_DIR}/output/messages.sh"
 
+# Install pacman and its dependencies. The entire base system is not
+# needed in the virtual environment as that will install packages not
+# necessary for the virtual environment.
+install_pacman() {
+    root_dir="${1}"
+    sudo pacman --root "${root_dir}" -Sy pacman --noconfirm
+}
+
+add_activation_script() {
+    destination="${1}"
+    sudo cp "${ACTIVATION_DIRECTORY}/pacman-venv-activate.bash" "${destination}/bin/pacman-venv-activate"
+}
+
+# Add the necessary package manager executables to pass the --root argument to pacman
+add_shims() {
+    destination="${1}"
+    cp "${SHIMS_DIRECTORY}/pacman" "${destination}/.pacman-venv-pacman"
+    cp "${SHIMS_DIRECTORY}/yay" "${destination}/.pacman-venv-yay"
+}
+
+# Add the .gitignore file so the virtual environment doesn't show up in git repositories
+add_gitignore() {
+    destination="${1}"
+    printf "# Created automatically by pacman-venv\n*\n" > "${destination}/.gitignore"
+}
+
 create() {
     destination="${1}"
     full_dest="${PWD}/${destination}"
     info "Creating pacman virtual environment in ${destination}"
 
-    # Make the pacman directory for pacman to install databases in
+    # Make the virtual environment directory and pacman
+    # directory for pacman to install databases in.
     mkdir -p "${full_dest}/var/lib/pacman"
 
     info "Installing base environment"
 
-    # Install pacman and its dependencies. The entire base system is not needed as
-    # that will install packages not necessary for the virtual environment.
-    sudo pacman --root "${full_dest}" -Sy pacman --noconfirm
+    install_pacman "${full_dest}"
 
-    # Add the activation script
-    sudo cp "${ACTIVATION_DIRECTORY}/pacman-venv-activate.bash" "${full_dest}/bin/pacman-venv-activate"
-
-    # Add the necessary package manager executables to pass the --root argument to pacman
-    cp "${SHIMS_DIRECTORY}/pacman" "${full_dest}/.pacman-venv-pacman"
-    cp "${SHIMS_DIRECTORY}/yay" "${full_dest}/.pacman-venv-yay"
-
-    # Add the .gitignore file so the virtual environment doesn't show up in git repositories
-    printf "# Created automatically by pacman-venv\n*\n" > "${full_dest}/.gitignore"
+    add_activation_script "${full_dest}"
+    add_shims "${full_dest}"
+    add_gitignore "${full_dest}"
 
     info "Successfully created pacman virtual environment at ${destination}"
 }
 
 destination="${DEFAULT_DESTINATION}"
-[[ "${1}" ]] && destination="${1}"
+[[ -n "${1}" ]] && destination="${1}"
 
 if [[ -d "${PWD}/${destination}" ]] || [[ -f "${PWD}/${destination}" ]]; then
     error "Destination '${destination}' already exists!"

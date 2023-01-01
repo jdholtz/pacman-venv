@@ -10,6 +10,17 @@ SHIMS_DIRECTORY="${CURR_DIR}/shims"
 # Import message helper functions
 source "${CURR_DIR}/output/messages.sh"
 
+usage() {
+    echo "Pacman Virtual Environment"
+    echo
+    echo "Usage:"
+    echo "    pacman-venv [options]        Create virtual environment with default name"
+    echo "    pacman-venv [options] [dest] Create virtual environment with specified name"
+    echo
+    echo "Options:"
+    echo "    -h, --help Display this help and exit"
+}
+
 # Install pacman and its dependencies. The entire base system is not
 # needed in the virtual environment as that will install packages not
 # necessary for the virtual environment.
@@ -57,8 +68,27 @@ create() {
 }
 
 destination="${DEFAULT_DESTINATION}"
-[[ -n "${1}" ]] && destination="${1}"
 
+# Parse flags
+while [[ ! "$#" == 0 ]]; do
+    case "$1" in
+        --help | -h)
+            usage
+            exit
+            ;;
+        -*)
+            error "Invalid argument '${1}'"
+            usage
+            exit
+            ;;
+        *)
+            destination="${1}"
+            ;;
+    esac
+    shift
+done
+
+# Ensure destination is valid
 if [[ -d "${PWD}/${destination}" ]] || [[ -f "${PWD}/${destination}" ]]; then
     error "Destination '${destination}' already exists!"
     exit 1

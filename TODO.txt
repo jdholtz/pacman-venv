@@ -3,8 +3,6 @@
 - Work with pacman/yay aliases
 - Add --clear flag to remove everything in directory before creation
 - Add interactive flag when installing virtual environment
-- Send usage when command isn't found
-- Usage flag (--help)
 - Version flag
 - Add support for other shells (fish, zsh, etc.)
 - Add README

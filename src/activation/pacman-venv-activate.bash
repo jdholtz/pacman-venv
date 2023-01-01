@@ -8,13 +8,13 @@ if [[ "${BASH_SOURCE-}" == "$0" ]]; then
 fi
 
 exit() {
-	# Reset all variables to their old values
+    # Reset all variables to their old values
     PATH="${_PACMAN_VENV_OLD_PATH}"
     PS1="${_PACMAN_VENV_OLD_PS1}"
     LD_LIBRARY_PATH="${_PACMAN_VENV_OLD_LD_LIBRARY_PATH}"
     PACMAN="${_PACMAN_VENV_OLD_PACMAN}"
 
-	# Unset all the temporary variables/functions
+    # Unset all the temporary variables/functions
     unset _PACMAN_VENV_OLD_PATH
     unset _PACMAN_VENV_OLD_PS1
     unset _PACMAN_VENV_OLD_LD_LIBRARY_PATH
@@ -22,17 +22,17 @@ exit() {
     unset _PACMAN_VENV
     unset -f exit
 
-	# Reset the sudo alias if it was set before.
-	# Otherwise, unset it
+    # Reset the sudo alias if it was set before.
+    # Otherwise, unset it
     if [[ ${_PACMAN_VENV_OLD_SUDO} ]]; then
-		eval "${_PACMAN_VENV_OLD_SUDO}"
+        eval "${_PACMAN_VENV_OLD_SUDO}"
     else
-		unalias sudo
+        unalias sudo
     fi
 
     unalias pacman yay
 
-	# Forget past commands because the $PATH changed
+    # Forget past commands because the $PATH changed
     hash -r
 }
 

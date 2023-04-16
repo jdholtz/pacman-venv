@@ -27,7 +27,7 @@ usage() {
     echo
     echo "Usage:"
     echo "    pacman-venv [options]        Create a virtual environment with the default name"
-    echo "    pacman-venv [options] [dest] Create a virtual environment with the specified name"
+    echo "    pacman-venv [options] [name] Create a virtual environment with the specified name"
     echo
     echo "Options:"
     echo "    --clear           Clear the destination directory before creating the virtual environment"

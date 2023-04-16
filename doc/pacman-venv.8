@@ -1,0 +1,49 @@
+.\" vim:ft=groff:
+.TH "PACMAN-VENV" 8 "2023-04-16" "Pacman Virtual Environment v0.0" "Pacman Virtual Environment Manual"
+
+.SH NAME
+pacman-venv - a tool to create virtual environments for Pacman
+
+.SH SYNOPSIS
+\fBpacman-venv\fR [options]
+.sp
+\fBpacman-venv\fR [options] [name]
+
+.SH DESCRIPTION
+Pacman Virtual Environment is a tool to create virtual environments for Pacman and AUR helpers.
+
+This tool is inspired by Python's virtualenv and therefore works similarly.
+
+.SH OPTIONS
+
+.TP
+.B --clear
+Clear the destination directory before creating the virtual environment. This command uses \fBsudo\fR
+to remove the directory.
+.br
+If the destination directory already exists and this flag is not passed, pacman-venv will exit with an error.
+
+.TP
+.B -i, --interactive
+Ask for confirmation when installing the base virtual environment packages. By default, pacman will install the
+base environment
+.br
+with the \fB--noconfirm\fR flag. Using this flag will result in you being prompted when pacman installs the base
+environment.
+
+.TP
+.B -h, --help
+Display usage information and exit
+
+.TP
+.B -v, --version
+Display information version and exit
+
+.SH SEE ALSO
+.B pacman(8), yay(8)
+
+.SH BUGS
+Please report bugs to the GitHub issue tracker: https://github.com/jdholtz/pacman-venv/issues
+
+.SH AUTHOR
+Joey Holtzman <joeyholtzman0507@gmail.com>

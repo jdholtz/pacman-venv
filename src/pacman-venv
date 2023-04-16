@@ -8,6 +8,9 @@ CURR_DIR="$(dirname "${0}")"
 ACTIVATION_DIRECTORY="${CURR_DIR}/activation"
 SHIMS_DIRECTORY="${CURR_DIR}/shims"
 
+# Option to clear the destination directory when creating a virtual environment
+CLEAR_DESTINATION=0
+
 # Import message helper functions
 source "${CURR_DIR}/output/messages.sh"
 
@@ -23,6 +26,7 @@ usage() {
     echo "    pacman-venv [options] [dest] Create a virtual environment with the specified name"
     echo
     echo "Options:"
+    echo "    --clear       Clear the destination directory before creating the virtual environment"
     echo "    -h, --help    Display this help and exit"
     echo "    -v, --version Display information version and exit"
 }
@@ -78,6 +82,9 @@ destination="${DEFAULT_DESTINATION}"
 # Parse flags
 while [[ ! "$#" == 0 ]]; do
     case "$1" in
+        --clear)
+            CLEAR_DESTINATION=1
+            ;;
         --help | -h)
             usage
             exit
@@ -98,10 +105,17 @@ while [[ ! "$#" == 0 ]]; do
     shift
 done
 
-# Ensure destination is valid
+# Ensure destination is valid. If the --clear option is passed in, remove the destination
 if [[ -d "${PWD}/${destination}" ]] || [[ -f "${PWD}/${destination}" ]]; then
-    error "Destination '${destination}' already exists!"
-    exit 1
+    if [[ "${CLEAR_DESTINATION}" == 1 ]]; then
+        info "Clearing '${destination}' before installing"
+        # Set default for PWD to ensure rm -r / is never executed
+        sudo rm -r "${PWD:?}/${destination}"
+        info "'${destination}' successfully cleared"
+    else
+        error "Destination '${destination}' already exists!"
+        exit 1
+    fi
 fi
 
 create "${destination}"

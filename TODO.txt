@@ -1,7 +1,6 @@
 - Copy makepkg and pacman config to virtual environment
     - Add flags to make copying optional, but default to true
 - Work with pacman/yay aliases
-- Add --clear flag to remove everything in directory before creation
 - Add interactive flag when installing virtual environment
 - Add support for other shells (fish, zsh, etc.)
 - Add README

@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+# Exit when Ctrl+C is pressed
+trap "exit" SIGINT
+
 DEFAULT_DESTINATION="pacman-venv"
 VERSION="v0.0"
 

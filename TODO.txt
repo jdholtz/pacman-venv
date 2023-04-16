@@ -4,6 +4,4 @@
 - Add support for other shells (fish, zsh, etc.)
 - Add AUR package
 - Add pre-commit hooks and github workflows for tests + linting/formatting
-- Add .editorconfig
-- Add LICENSE
 - Add unit tests

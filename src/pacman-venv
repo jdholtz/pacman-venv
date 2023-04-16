@@ -36,6 +36,23 @@ usage() {
     echo "    -v, --version     Display information version and exit"
 }
 
+# Ensure destination is valid. If the --clear option is passed in, remove the destination
+handle_destination() {
+    local destination="${1}"
+    local full_dest="${2}"
+    if [[ -d "${full_dest}" ]] || [[ -f "${full_dest}" ]]; then
+        if [[ "${CLEAR_DESTINATION}" == 1 ]]; then
+            info "Clearing '${destination}' before installing"
+            info "${full_dest}"
+            sudo rm -r "${full_dest}"
+            info "'${destination}' successfully cleared"
+        else
+            error "Destination '${destination}' already exists!"
+            exit 1
+        fi
+    fi
+}
+
 # Install pacman and its dependencies. The entire base system is not
 # needed in the virtual environment as that will install packages not
 # necessary for the virtual environment.
@@ -66,7 +83,10 @@ add_gitignore() {
 
 create() {
     local destination="${1}"
-    local full_dest="${PWD}/${destination}"
+    # Set default for PWD to ensure rm -r / is never executed in handle_destination
+    local full_dest="${PWD:?}/${destination}"
+    handle_destination "${destination}" "${full_dest}"
+
     info "Creating pacman virtual environment in ${destination}"
 
     # Make the virtual environment directory and pacman
@@ -83,8 +103,6 @@ create() {
 
     info "Successfully created pacman virtual environment at ${destination}"
 }
-
-destination="${DEFAULT_DESTINATION}"
 
 # Parse flags
 while [[ ! "$#" == 0 ]]; do
@@ -115,17 +133,8 @@ while [[ ! "$#" == 0 ]]; do
     shift
 done
 
-# Ensure destination is valid. If the --clear option is passed in, remove the destination
-if [[ -d "${PWD}/${destination}" ]] || [[ -f "${PWD}/${destination}" ]]; then
-    if [[ "${CLEAR_DESTINATION}" == 1 ]]; then
-        info "Clearing '${destination}' before installing"
-        # Set default for PWD to ensure rm -r / is never executed
-        sudo rm -r "${PWD:?}/${destination}"
-        info "'${destination}' successfully cleared"
-    else
-        error "Destination '${destination}' already exists!"
-        exit 1
-    fi
-fi
+# Set the default if no destination is set. Also prevents inputs like "" to be set
+# to destination.
+destination="${destination:-${DEFAULT_DESTINATION}}"
 
 create "${destination}"

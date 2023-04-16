@@ -6,4 +6,3 @@
 - Add AUR package
 - Add pre-commit hooks and github workflows for tests + linting/formatting
 - Add unit tests
-- Add issue templates

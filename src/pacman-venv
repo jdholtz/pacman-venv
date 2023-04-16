@@ -8,8 +8,9 @@ CURR_DIR="$(dirname "${0}")"
 ACTIVATION_DIRECTORY="${CURR_DIR}/activation"
 SHIMS_DIRECTORY="${CURR_DIR}/shims"
 
-# Option to clear the destination directory when creating a virtual environment
+# Options affecting the virtual environment installation
 CLEAR_DESTINATION=0
+INTERACTIVE=0
 
 # Import message helper functions
 source "${CURR_DIR}/output/messages.sh"
@@ -26,9 +27,10 @@ usage() {
     echo "    pacman-venv [options] [dest] Create a virtual environment with the specified name"
     echo
     echo "Options:"
-    echo "    --clear       Clear the destination directory before creating the virtual environment"
-    echo "    -h, --help    Display this help and exit"
-    echo "    -v, --version Display information version and exit"
+    echo "    --clear           Clear the destination directory before creating the virtual environment"
+    echo "    -i, --interactive Ask for confirmation when installing the base virtual environment packages"
+    echo "    -h, --help        Display this help and exit"
+    echo "    -v, --version     Display information version and exit"
 }
 
 # Install pacman and its dependencies. The entire base system is not
@@ -36,7 +38,9 @@ usage() {
 # necessary for the virtual environment.
 install_pacman() {
     local root_dir="${1}"
-    sudo pacman --root "${root_dir}" -Sy pacman --noconfirm
+    local pacman_opts=()
+    [[ "${INTERACTIVE}" != 1 ]] && pacman_opts+=("--noconfirm")
+    sudo pacman --root "${root_dir}" -Sy pacman "${pacman_opts[@]}"
 }
 
 add_activation_script() {
@@ -84,6 +88,9 @@ while [[ ! "$#" == 0 ]]; do
     case "$1" in
         --clear)
             CLEAR_DESTINATION=1
+            ;;
+        --interactive | -i)
+            INTERACTIVE=1
             ;;
         --help | -h)
             usage

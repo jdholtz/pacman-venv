@@ -7,7 +7,7 @@ trap "exit" SIGINT
 DEFAULT_DESTINATION="pacman-venv"
 VERSION="v0.0"
 
-CURR_DIR="$(dirname "${0}")"
+CURR_DIR="$(dirname "$(realpath "${0}")")"
 ACTIVATION_DIRECTORY="${CURR_DIR}/activation"
 SHIMS_DIRECTORY="${CURR_DIR}/shims"
 

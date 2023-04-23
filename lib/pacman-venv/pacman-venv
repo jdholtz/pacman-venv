@@ -7,33 +7,36 @@ trap "exit" SIGINT
 DEFAULT_DESTINATION="pacman-venv"
 VERSION="v0.0"
 
-CURR_DIR="$(dirname "$(realpath "${0}")")"
-ACTIVATION_DIRECTORY="${CURR_DIR}/activation"
-SHIMS_DIRECTORY="${CURR_DIR}/shims"
+PACMAN_VENV_ROOT="${BASH_SOURCE[0]%/*/*}/lib/pacman-venv"
+ACTIVATION_DIRECTORY="${PACMAN_VENV_ROOT}/activation"
+SHIMS_DIRECTORY="${PACMAN_VENV_ROOT}/shims"
 
 # Options affecting the virtual environment installation
 CLEAR_DESTINATION=0
 INTERACTIVE=0
 
 # Import message helper functions
-source "${CURR_DIR}/output/messages.sh"
+source "${PACMAN_VENV_ROOT}/output/messages.sh"
 
 version() {
     echo "Pacman Virtual Environment ${VERSION}"
 }
 
 usage() {
+    local cmd="${0##*/}"
     version
     echo
     echo "Usage:"
-    echo "    pacman-venv [options]        Create a virtual environment with the default name"
-    echo "    pacman-venv [options] [name] Create a virtual environment with the specified name"
+    echo "    ${cmd} [options]        Create a virtual environment with the default name"
+    echo "    ${cmd} [options] [name] Create a virtual environment with the specified name"
     echo
     echo "Options:"
     echo "    --clear           Clear the destination directory before creating the virtual environment"
     echo "    -i, --interactive Ask for confirmation when installing the base virtual environment packages"
     echo "    -h, --help        Display this help and exit"
     echo "    -v, --version     Display information version and exit"
+    echo
+    echo "For more information, check out https://github.com/jdholtz/pacman-venv#readme"
 }
 
 # Ensure destination is valid. If the --clear option is passed in, remove the destination

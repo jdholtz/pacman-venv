@@ -2,6 +2,9 @@
 A tool to create isolated virtual environments for [Pacman][0]. This tool is inspired
 by Python's [virtualenv][1] and therefore works similarly.
 
+**Note**: pacman-venv is still in its development and testing phase. Not all changes
+will be backwards compatible. To stay updated with the latest changes, check out the
+[Changelog](CHANGELOG.md).
 ## Table of Contents
 - [Overview](#overview)
     * [How It Works](#how-it-works)
@@ -31,8 +34,19 @@ the virtual environment.
 virtual environment is active (similarly to [virtualenv][1]).
 
 ## Installation
+The recommended way to install pacman-venv is with an AUR helper. Here is an example with [Yay][2]:
+```shell
+yay -S pacman-venv
+```
 
 ### From Source
+Pacman-venv can also be installed by cloning the PKGBUILD and building with makepkg:
+```shell
+pacman -S --needed git
+git clone https://aur.archlinux.org/pacman-venv.git
+cd pacman-venv
+makepkg -si
+```
 
 ## Usage
 Create a virtual environment in the current directory:

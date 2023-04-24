@@ -5,6 +5,10 @@ by Python's [virtualenv][1] and therefore works similarly.
 **Note**: pacman-venv is still in its development and testing phase. Not all changes
 will be backwards compatible. To stay updated with the latest changes, check out the
 [Changelog](CHANGELOG.md).
+
+Pacman-venv currently only works with Bash shells. Additionally, it currently only has
+support for Pacman and Yay.
+
 ## Table of Contents
 - [Overview](#overview)
     * [How It Works](#how-it-works)

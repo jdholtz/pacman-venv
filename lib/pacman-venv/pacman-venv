@@ -44,15 +44,15 @@ handle_destination() {
     local destination="${1}"
     local full_dest="${2}"
     if [[ -d "${full_dest}" ]] || [[ -f "${full_dest}" ]]; then
-        if [[ "${CLEAR_DESTINATION}" == 1 ]]; then
-            info "Clearing '${destination}' before installing"
-            info "${full_dest}"
-            sudo rm -r "${full_dest}"
-            info "'${destination}' successfully cleared"
-        else
-            error "Destination '${destination}' already exists!"
+        if [[ "${CLEAR_DESTINATION}" != 1 ]]; then
+            error "Destination '${destination}' already exists! Pass the --clear flag to overwrite the destination"
             exit 1
         fi
+
+        # The --clear flag was passed
+        info "Clearing '${destination}' before installing"
+        sudo rm -r "${full_dest}"
+        info "'${destination}' successfully cleared"
     fi
 }
 
@@ -63,7 +63,7 @@ install_pacman() {
     local root_dir="${1}"
     local pacman_opts=()
     [[ "${INTERACTIVE}" != 1 ]] && pacman_opts+=("--noconfirm")
-    sudo pacman --root "${root_dir}" -Sy pacman "${pacman_opts[@]}"
+    sudo pacman --root "${root_dir}" "${pacman_opts[@]}" -Sy pacman
 }
 
 add_activation_script() {

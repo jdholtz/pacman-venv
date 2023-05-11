@@ -4,7 +4,6 @@
 - [ ] Work with pacman/yay aliases
 - [ ] Add support for other shells (fish, zsh, etc.)
 - [ ] Add support for other AUR helpers
-- [ ] Add AUR package
 - [ ] Add pre-commit hooks and github workflows for tests + linting/formatting
 - [ ] Add unit tests
 - [ ] Add completions for all shells

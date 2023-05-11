@@ -87,6 +87,7 @@ export PACMAN="${_PACMAN_VENV}/.pacman-venv-pacman"
 alias sudo="sudo -E "
 
 # Point the package managers to Pacman Venv's command (include --root flag)
+# Need to be wrapped in single quotes (SC2139)
 alias pacman='${PACMAN}'
 alias yay='${_PACMAN_VENV}/.pacman-venv-yay'
 

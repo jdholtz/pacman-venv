@@ -74,8 +74,11 @@ add_activation_script() {
 # Add the necessary package manager executables to pass the --root argument to pacman
 add_shims() {
     local destination="${1}"
-    cp "${SHIMS_DIRECTORY}/pacman" "${destination}/.pacman-venv-pacman"
-    cp "${SHIMS_DIRECTORY}/yay" "${destination}/.pacman-venv-yay"
+    mkdir "${destination}/pacman-venv-shims"
+    for file in "${SHIMS_DIRECTORY}"/* ; do
+        file_name="$(basename "${file}")"
+        cp "${SHIMS_DIRECTORY}/${file_name}" "${destination}/pacman-venv-shims/.pacman-venv-${file_name}"
+    done
 }
 
 # Add the .gitignore file so the virtual environment doesn't show up in git repositories

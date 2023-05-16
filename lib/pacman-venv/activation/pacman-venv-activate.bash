@@ -14,14 +14,6 @@ exit() {
     LD_LIBRARY_PATH="${_PACMAN_VENV_OLD_LD_LIBRARY_PATH}"
     PACMAN="${_PACMAN_VENV_OLD_PACMAN}"
 
-    # Unset all the temporary variables/functions
-    unset _PACMAN_VENV_OLD_PATH
-    unset _PACMAN_VENV_OLD_PS1
-    unset _PACMAN_VENV_OLD_LD_LIBRARY_PATH
-    unset _PACMAN_VENV_OLD_PACMAN
-    unset _PACMAN_VENV
-    unset -f exit
-
     # Reset the sudo alias if it was set before.
     # Otherwise, unset it
     if [[ ${_PACMAN_VENV_OLD_SUDO} ]]; then
@@ -30,7 +22,16 @@ exit() {
         unalias sudo
     fi
 
-    unalias pacman yay
+    remove_shim_aliases
+
+    # Unset all the temporary variables/functions
+    unset _PACMAN_VENV_OLD_PATH
+    unset _PACMAN_VENV_OLD_PS1
+    unset _PACMAN_VENV_OLD_LD_LIBRARY_PATH
+    unset _PACMAN_VENV_OLD_PACMAN
+    unset _PACMAN_VENV_OLD_SUDO
+    unset _PACMAN_VENV
+    unset -f exit deactivate
 
     # Forget past commands because the $PATH changed
     hash -r
@@ -38,7 +39,6 @@ exit() {
 
 # Alias for exit
 deactivate() {
-    unset -f deactivate
     exit
 }
 
@@ -57,6 +57,25 @@ create_path() {
     done
 
     echo "${new_path}"
+}
+
+# Point the package managers to Pacman Venv's command (include --root flag)
+# Need to be wrapped in single quotes (SC2139)
+create_shim_aliases() {
+    for shim in "${_PACMAN_VENV}"/pacman-venv-shims/*; do
+        alias_name="${shim##*.pacman-venv-}"
+        # shellcheck disable=SC2139
+        # These variables need to be expanded
+        alias "${alias_name}"="${shim}"
+    done
+}
+
+remove_shim_aliases() {
+    for shim in "${_PACMAN_VENV}"/pacman-venv-shims/*; do
+        alias_name="${shim##*.pacman-venv-}"
+        unalias "${alias_name}"
+    done
+
 }
 
 # Store all the old values of the variables
@@ -81,15 +100,12 @@ export PS1
 # Makepkg uses this variable to execute its Pacman command.
 # However, we need to override the default to use the --root flag,
 # so point makepkg to our pacman command.
-export PACMAN="${_PACMAN_VENV}/.pacman-venv-pacman"
+export PACMAN="${_PACMAN_VENV}/pacman-venv-shims/.pacman-venv-pacman"
 
 # Preserve env variables and allow sudo to be run with aliases
 alias sudo="sudo -E "
 
-# Point the package managers to Pacman Venv's command (include --root flag)
-# Need to be wrapped in single quotes (SC2139)
-alias pacman='${PACMAN}'
-alias yay='${_PACMAN_VENV}/.pacman-venv-yay'
+create_shim_aliases
 
 # Forget past commands because the $PATH changed
 hash -r

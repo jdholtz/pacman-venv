@@ -2,6 +2,9 @@
 
 ## Upcoming
 
+### New Features
+- `pacman-conf` now correctly uses the virtual environment
+
 ### Improvements
 - Using the shims in a script (i.e. `pacman`) will now use the virtual environment correctly
 

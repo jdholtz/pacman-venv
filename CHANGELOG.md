@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 0.2 (2023-05-17)
 
 ### New Features
 - `pacman-conf` now correctly uses the virtual environment

@@ -4,7 +4,8 @@ by Python's [virtualenv][1] and therefore works similarly.
 
 **Note**: pacman-venv is still in its development and testing phase. Not all changes
 will be backwards compatible. To stay updated with the latest changes, check out the
-[Changelog](CHANGELOG.md).
+[Changelog](CHANGELOG.md). Additionally, each update may require you to reinstall your
+virtual environment for the changes to be applied.
 
 Pacman-venv currently only works with Bash shells. Additionally, it currently only has
 support for Pacman and Yay.

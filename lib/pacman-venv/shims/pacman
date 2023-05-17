@@ -2,7 +2,7 @@
 
 _pacman() {
     # Override pacman to execute with the root flag
-    pacman --root "${_PACMAN_VENV}" "$@"
+    PATH="${PATH#*:}" pacman --root "${_PACMAN_VENV}" "$@"
 }
 
 _pacman "$@"

@@ -11,7 +11,7 @@ _yay() {
     fi
 
     # Override yay to execute with the root flag
-    yay --root "${_PACMAN_VENV}" "${args[@]}"
+    PATH="${PATH#*:}" yay --root "${_PACMAN_VENV}" "${args[@]}"
 }
 
 _yay "$@"

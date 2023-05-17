@@ -30,10 +30,9 @@ After sourcing the activation script, pacman-venv configures your current enviro
 to correctly use the isolated environment.
 - Most notably, your `PATH` is configured to look for commands to run in the virtual
 environment before system-wide commands.
-- Additionally, aliases are created for all supported package managers and AUR helpers
-(currently [Pacman][0] and [Yay][2]). These aliases point to Bash scripts that execute
-their respective package managers with the `--root` argument pointing to the location of
-the virtual environment.
+- Additionally, wrappers are created for all supported package managers and AUR helpers
+(currently [Pacman][0] and [Yay][2]). These wrappers execute their respective package
+managers with the `--root` argument pointing to the location of the virtual environment.
 - Last, the name of the virtual environment will appear in the prompt to indicate that the
 virtual environment is active (similarly to [virtualenv][1]).
 

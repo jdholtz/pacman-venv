@@ -4,6 +4,7 @@
 
 ### New Features
 - `pacman-conf` now correctly uses the virtual environment
+- `sudo` uses the virtual environment in scripts (i.e. makepkg)
 
 ### Improvements
 - Using the shims in a script (i.e. `pacman`) will now use the virtual environment correctly

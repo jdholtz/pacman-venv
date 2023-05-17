@@ -14,20 +14,11 @@ exit() {
     LD_LIBRARY_PATH="${_PACMAN_VENV_OLD_LD_LIBRARY_PATH}"
     PACMAN="${_PACMAN_VENV_OLD_PACMAN}"
 
-    # Reset the sudo alias if it was set before.
-    # Otherwise, unset it
-    if [[ ${_PACMAN_VENV_OLD_SUDO} ]]; then
-        eval "${_PACMAN_VENV_OLD_SUDO}"
-    else
-        unalias sudo
-    fi
-
     # Unset all the temporary variables/functions
     unset _PACMAN_VENV_OLD_PATH
     unset _PACMAN_VENV_OLD_PS1
     unset _PACMAN_VENV_OLD_LD_LIBRARY_PATH
     unset _PACMAN_VENV_OLD_PACMAN
-    unset _PACMAN_VENV_OLD_SUDO
     unset _PACMAN_VENV
     unset -f exit deactivate
 
@@ -65,7 +56,6 @@ _PACMAN_VENV_OLD_PATH="${PATH}"
 _PACMAN_VENV_OLD_PS1="${PS1}"
 _PACMAN_VENV_OLD_LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 _PACMAN_VENV_OLD_PACMAN="${PACMAN}"
-_PACMAN_VENV_OLD_SUDO="$(alias sudo 2>/dev/null)"
 
 # Name of the virtual environment
 _PACMAN_VENV="$(realpath "${BASH_SOURCE[0]}")"
@@ -83,9 +73,6 @@ export PS1
 # However, we need to override the default to use the --root flag,
 # so point makepkg to our pacman command.
 export PACMAN="${_PACMAN_VENV}/pacman-venv-shims/pacman"
-
-# Preserve env variables and allow sudo to be run with aliases
-alias sudo="sudo -E "
 
 # Forget past commands because the $PATH changed
 hash -r

@@ -7,6 +7,4 @@
 - [ ] Add pre-commit hooks and github workflows for tests + linting/formatting
 - [ ] Add unit tests
 - [ ] Add completions for all shells
-- [ ] Fix makepkg not working in virtual environments
-    - [ ] This is possibly due to pacman-conf using the wrong root and DB path
 - [ ] Add pacman-venv-git

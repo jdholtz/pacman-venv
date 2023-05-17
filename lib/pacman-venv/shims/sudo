@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+_sudo() {
+    # Override sudo to preserve environment variables when called
+    PATH="${PATH#*:}" sudo -E "$@"
+}
+
+_sudo "$@"

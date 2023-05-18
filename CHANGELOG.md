@@ -5,6 +5,9 @@
 ### New Features
 - Completions were added for Bash
 
+### Improvements
+- The order of the directories in the PATH are kept in the same order within the virtual environment
+
 
 ## 0.2 (2023-05-17)
 

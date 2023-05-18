@@ -40,9 +40,11 @@ create_path() {
     IFS=":" read -r -a path_array <<< "${PATH}"
 
     # Prepend the PACMAN VENV to every directory in PATH
+    # Iterate in reverse to keep the order of the paths as they
+    # are in the original PATH
     local new_path="${PATH}"
-    for path in "${path_array[@]}"; do
-        new_path="${_PACMAN_VENV}${path}:${new_path}"
+    for ((i=${#path_array[@]}-1; i>=0; i--)); do
+        new_path="${_PACMAN_VENV}${path_array[$i]}:${new_path}"
     done
 
     # Add the shims directory to the beginning of the PATH

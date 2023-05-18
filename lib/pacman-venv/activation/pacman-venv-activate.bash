@@ -5,6 +5,9 @@
 if [[ "${BASH_SOURCE-}" == "$0" ]]; then
     echo "This script must be sourced. Use source ${0}"
     exit 1
+elif [[ -n "${_PACMAN_VENV}" ]]; then
+    echo "Nested virtual environments are not supported"
+    exit 1
 fi
 
 exit() {

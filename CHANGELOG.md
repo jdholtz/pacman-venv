@@ -4,6 +4,7 @@
 
 ### New Features
 - Completions were added for Bash
+- Prevent nested virtual environments
 
 ### Improvements
 - The order of the directories in the PATH are kept in the same order within the virtual environment

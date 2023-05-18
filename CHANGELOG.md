@@ -1,5 +1,11 @@
 # Changelog
 
+## Upcoming
+
+### New Features
+- Completions were added for Bash
+
+
 ## 0.2 (2023-05-17)
 
 ### New Features

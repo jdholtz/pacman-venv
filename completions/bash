@@ -1,0 +1,24 @@
+_pacman_venv() {
+    local cur prev
+    _init_completion -s || return
+
+    case $prev in
+        # Don't complete if these arguments already exist
+        -h | --help | -v | --version)
+            return
+            ;;
+    esac
+
+    # Return when attempting to complete without a hyphen already typed
+    if [[ $cur != -* ]]; then
+        return
+    fi
+
+    # Add all of the options to the completion
+    COMPREPLY=($(compgen -W '-h -i -v --clear --help
+        --interactive --version' -- "$cur"))
+
+} &&
+    complete -F _pacman_venv pacman-venv
+
+# ex: filetype=sh

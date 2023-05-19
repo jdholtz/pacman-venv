@@ -1,0 +1,27 @@
+#compdef pacman-venv
+
+# options for passing to _arguments
+_pacman_venv_opts=(
+    '--clear[Clear the destination before creating]'
+    {-i,--interactive}'[Ask for confirmation when installing the base packages]'
+    {-h,--help}'[Display the help menu]'
+    {-v,--version}'[Display version and exit]'
+)
+
+_pacman_venv() {
+    # Get the previous two elements for better parsing of the flags
+    local prev="${words[-2]}${words[-1]}"
+
+    # Don't complete if these options are the previous argument
+    case $prev in
+        -h|-v|*--help*|*--version*)
+            return 0
+            ;;
+    esac
+
+    _arguments "${_pacman_venv_opts[@]}"
+}
+
+_pacman_venv
+
+# vim: filetype=zsh

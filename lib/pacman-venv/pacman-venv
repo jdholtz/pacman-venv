@@ -56,14 +56,26 @@ handle_destination() {
     fi
 }
 
-# Install pacman and its dependencies. The entire base system is not
-# needed in the virtual environment as that will install packages not
-# necessary for the virtual environment.
-install_pacman() {
+# Add files that are needed for the installation to fully work
+add_necessary_files() {
+    local destination="${1}"
+
+    # Add /dev/null to the destination. This is needed for any commands
+    # that use or redirect to /dev/null during installation (e.g. gnupg).
+    mkdir -p "${destination}/dev"
+    sudo mknod -m 0666 pacman-venv/dev/null c 1 3
+}
+
+# Install the necessary packages for the virtual environment. Sed is needed because
+# some installations/uninstallations require it (e.g. fish) but don't explicitly
+# download it
+install_packages() {
     local root_dir="${1}"
+    local packages=("pacman" "sed")
     local pacman_opts=()
     [[ "${INTERACTIVE}" != 1 ]] && pacman_opts+=("--noconfirm")
-    sudo pacman --root "${root_dir}" "${pacman_opts[@]}" -Sy pacman
+
+    sudo pacman --root "${root_dir}" "${pacman_opts[@]}" -Sy "${packages[@]}"
 }
 
 add_activation_scripts() {
@@ -103,7 +115,8 @@ create() {
 
     info "Installing base environment"
 
-    install_pacman "${full_dest}"
+    add_necessary_files "${full_dest}"
+    install_packages "${full_dest}"
 
     add_activation_scripts "${full_dest}"
     add_shims "${full_dest}"

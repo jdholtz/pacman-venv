@@ -3,13 +3,16 @@
 ## Upcoming
 
 ### New Features
-- Completions were added for Bash
+- Added completions for all supported shells
 - Prevent nested virtual environments
 
 ### Improvements
 - The order of the directories in the PATH are kept in the same order within the virtual environment
 - Add support for the Fish shell ([#6](https://github.com/jdholtz/pacman-venv/pull/6))
 - Add support for the Zsh shell ([#7](https://github.com/jdholtz/pacman-venv/pull/7))
+
+### Bug Fixes
+- Fix various packages not installing/uninstalling correctly (e.g. fish and gnupg)
 
 
 ## 0.2 (2023-05-17)

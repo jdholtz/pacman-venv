@@ -66,9 +66,10 @@ install_pacman() {
     sudo pacman --root "${root_dir}" "${pacman_opts[@]}" -Sy pacman
 }
 
-add_activation_script() {
+add_activation_scripts() {
     local destination="${1}"
     sudo cp "${ACTIVATION_DIRECTORY}/pacman-venv-activate.bash" "${destination}/bin/pacman-venv-activate"
+    sudo cp "${ACTIVATION_DIRECTORY}/pacman-venv-activate.fish" "${destination}/bin/pacman-venv-activate.fish"
 }
 
 # Add the necessary package manager executables to pass the --root argument to pacman
@@ -104,7 +105,7 @@ create() {
 
     install_pacman "${full_dest}"
 
-    add_activation_script "${full_dest}"
+    add_activation_scripts "${full_dest}"
     add_shims "${full_dest}"
     add_gitignore "${full_dest}"
 

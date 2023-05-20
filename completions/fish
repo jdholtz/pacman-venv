@@ -1,0 +1,17 @@
+set -l progname pacman-venv
+
+# Don't complete if the help/version flags have already been provided as well as the
+# provided arg
+function __fish_pacman_venv_no_opt -a arg -d 'Test if pacman-venv has been given a flag'
+    return (not __fish_contains_opt -s h -s v help version $arg)
+end
+
+complete -c $progname -e
+complete -c $progname -f
+
+complete -c $progname -l clear -f -n '__fish_pacman_venv_no_opt clear' -d 'Clear the destination before creating'
+complete -c $progname -s i -l interactive -n '__fish_pacman_venv_no_opt interactive' -d 'Ask for confirmation when installing the base packages' -x
+complete -c $progname -s h -l help -n '__fish_pacman_venv_no_opt' -d 'Display the help menu' -x
+complete -c $progname -s v -l version -n '__fish_pacman_venv_no_opt' -d 'Display version and exit' -x
+
+# vim: filetype=fish

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # This activation script is compatible with both Bash and Zsh
 
 # This file is a modified version from Python's virtualenv
@@ -8,7 +10,7 @@ if [[ "${BASH_SOURCE-}" == "${0}" ]]; then
     exit 1
 elif [[ -n "${_PACMAN_VENV}" ]]; then
     echo "Nested virtual environments are not supported"
-    exit 1
+    return 1
 fi
 
 exit() {

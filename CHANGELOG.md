@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 0.3 (2023-05-20)
 
 ### New Features
 - Added completions for all supported shells

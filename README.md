@@ -7,8 +7,7 @@ will be backwards compatible. To stay updated with the latest changes, check out
 [Changelog](CHANGELOG.md). Additionally, each update may require you to reinstall your
 virtual environment for the changes to be applied.
 
-Pacman-venv currently only works with Bash shells. Additionally, it currently only has
-support for Pacman and Yay.
+Pacman-venv currently only has support for Pacman and Yay.
 
 ## Table of Contents
 - [Overview](#overview)
@@ -59,8 +58,8 @@ pacman-venv [name]
 ```
 **Note**: If name is not specified, the default name will be used (pacman-venv)
 
-To enter the virtual environment, source the `{name}/bin/pacman-venv-active` file. Here is
-an example for Bash:
+To enter the virtual environment, source the `{name}/bin/pacman-venv-active` file
+(Add the `.fish` extension if you are using the Fish shell). Here is an example for Bash:
 ```shell
 source pacman-venv/bin/pacman-venv-activate
 ```

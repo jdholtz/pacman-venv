@@ -12,6 +12,7 @@ install:
 	install -m 755 lib/$(PKGNAME)/shims/* -t $(DESTDIR)$(PREFIX)/lib/$(PKGNAME)/shims
 	install -Dm 644 doc/$(PKGNAME).8 $(DESTDIR)$(PREFIX)/share/man/man8/$(PKGNAME).8
 	install -Dm 644 completions/bash $(DESTDIR)$(PREFIX)/share/bash-completion/completions/$(PKGNAME)
+	install -Dm 644 completions/zsh $(DESTDIR)$(PREFIX)/share/zsh/site-functions/_$(PKGNAME)
 	install -Dm 644 completions/fish $(DESTDIR)$(PREFIX)/share/fish/vendor_completions.d/$(PKGNAME).fish
 
 .PHONY: uninstall
@@ -20,4 +21,5 @@ uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/$(BIN)
 	rm -f $(DESTDIR)$(PREFIX)/share/man/man8/$(PKGNAME).8
 	rm -f $(DESTDIR)$(PREFIX)/share/bash-completion/completions/$(PKGNAME)
+	rm -f $(DESTDIR)$(PREFIX)/share/zsh/site-functions/_$(PKGNAME)
 	rm -f $(DESTDIR)$(PREFIX)/share/fish/vendor_completions.d/$(PKGNAME).fish

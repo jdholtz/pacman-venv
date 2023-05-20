@@ -9,16 +9,12 @@ _pacman_venv() {
             ;;
     esac
 
-    # Return when attempting to complete without a hyphen already typed
-    if [[ $cur != -* ]]; then
-        return
-    fi
-
     # Add all of the options to the completion
+    # shellcheck disable=SC2207
     COMPREPLY=($(compgen -W '-h -i -v --clear --help
         --interactive --version' -- "$cur"))
 
 } &&
     complete -F _pacman_venv pacman-venv
 
-# ex: filetype=sh
+# vim: filetype=sh

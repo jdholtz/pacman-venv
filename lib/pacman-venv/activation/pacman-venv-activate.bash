@@ -53,21 +53,17 @@ create_path() {
         emulate -L ksh
     fi
 
+    # Split the PATH variable into an array
     # shellcheck disable=SC2229
     IFS=":" read -r "${read_array_flag}" path_array <<< "${PATH}"
 
-    # Split the PATH variable into an array
+    # Add the shims directory to the beginning of the path
+    local new_path="${_PACMAN_VENV}/pacman-venv-shims"
 
     # Prepend the PACMAN VENV to every directory in PATH
-    # Iterate in reverse to keep the order of the paths as they
-    # are in the original PATH
-    local new_path="${PATH}"
-    for ((i=${#path_array[@]}-1; i>=0; i--)); do
-        new_path="${_PACMAN_VENV}${path_array[$i]}:${new_path}"
+    for path in "${path_array[@]}"; do
+        new_path="${new_path}:${_PACMAN_VENV}${path}"
     done
-
-    # Add the shims directory to the beginning of the PATH
-    new_path="${_PACMAN_VENV}/pacman-venv-shims:${new_path}"
 
     echo "${new_path}"
 }
@@ -98,7 +94,7 @@ export _PACMAN_VENV
 
 # Set all the needed values for the virtual environment
 export LD_LIBRARY_PATH="${_PACMAN_VENV}/lib:${LD_LIBRARY_PATH}"
-PATH="$(create_path)"
+PATH="$(create_path):${PATH}"
 PS1="[$(basename "${_PACMAN_VENV}")] ${PS1}"
 export PATH
 export PS1

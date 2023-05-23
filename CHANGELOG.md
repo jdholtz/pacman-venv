@@ -13,6 +13,7 @@
 
 ### Bug Fixes
 - Fix various packages not installing/uninstalling correctly (e.g. fish and gnupg)
+- Fix commands prefixed with `sudo` not calling the virtual environment's shims
 
 
 ## 0.2 (2023-05-17)

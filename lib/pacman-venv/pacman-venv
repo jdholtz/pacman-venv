@@ -63,7 +63,7 @@ add_necessary_files() {
     # Add /dev/null to the destination. This is needed for any commands
     # that use or redirect to /dev/null during installation (e.g. gnupg).
     mkdir -p "${destination}/dev"
-    sudo mknod -m 0666 pacman-venv/dev/null c 1 3
+    sudo mknod -m 0666 "${destination}/dev/null" c 1 3
 }
 
 # Install the necessary packages for the virtual environment. Sed is needed because

@@ -9,6 +9,7 @@
 
 ### Bug Fixes
 - Fix commands prefixed with `sudo` not calling the virtual environment's shims
+- Fix environments not being installed correctly when using a different name than the default
 
 
 ## 0.3 (2023-05-20)

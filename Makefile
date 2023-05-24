@@ -23,3 +23,8 @@ uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/share/bash-completion/completions/$(PKGNAME)
 	rm -f $(DESTDIR)$(PREFIX)/share/zsh/site-functions/_$(PKGNAME)
 	rm -f $(DESTDIR)$(PREFIX)/share/fish/vendor_completions.d/$(PKGNAME).fish
+
+# Used to set the development version in pacman-venv-git
+.PHONY: version
+version:
+	sed -i '/VERSION="v.*"$$/c\VERSION="v$(VERSION)"' $(DESTDIR)$(PREFIX)/bin/$(BIN)

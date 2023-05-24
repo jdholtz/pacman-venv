@@ -36,10 +36,12 @@ managers with the `--root` argument pointing to the location of the virtual envi
 virtual environment is active (similarly to [virtualenv][1]).
 
 ## Installation
-The recommended way to install pacman-venv is with an AUR helper. Here is an example with [Yay][2]:
+The recommended way to install [pacman-venv][2] is with an AUR helper. Here is an example with [Yay][3]:
 ```shell
 yay -S pacman-venv
 ```
+
+The development version of this package can be installed with the [pacman-venv-git][4] package.
 
 ### From Source
 Pacman-venv can also be installed by cloning the PKGBUILD and building with makepkg:
@@ -76,24 +78,26 @@ Additional information on how to use pacman-venv can be found in the man page (`
 Below is a list of all shells and AUR helpers that pacman-venv currently supports
 
 #### Shells
-- [Bash][4]
-- [Zsh][4]
-- [Fish][5]
+- [Bash][5]
+- [Zsh][6]
+- [Fish][7]
 
 #### AUR Helpers
-- [Yay][2]
+- [Yay][3]
 
 ## Contributing
-If you run into any issues, please file it via [GitHub Issues][6]. Additionally, if you
-have any questions or discussion topics, start a [GitHub Discussion][7].
+If you run into any issues, please file it via [GitHub Issues][8]. Additionally, if you
+have any questions or discussion topics, start a [GitHub Discussion][9].
 
 Contributions are always welcome. Please read [Contributing.md](CONTRIBUTING.md) if you are considering making contributions.
 
 [0]: https://archlinux.org/pacman/
 [1]: https://virtualenv.pypa.io/en/latest/
-[2]: https://github.com/Jguer/yay
-[3]: https://www.gnu.org/software/bash/
-[4]: https://zsh.sourceforge.io/
-[5]: https://fishshell.com/
-[6]: https://github.com/jdholtz/pacman-venv/issues/new/choose
-[7]: https://github.com/jdholtz/pacman-venv/discussions/new/choose
+[2]: https://aur.archlinux.org/packages/pacman-venv
+[3]: https://github.com/Jguer/yay
+[4]: https://aur.archlinux.org/packages/pacman-venv-git
+[5]: https://www.gnu.org/software/bash/
+[6]: https://zsh.sourceforge.io/
+[7]: https://fishshell.com/
+[8]: https://github.com/jdholtz/pacman-venv/issues/new/choose
+[9]: https://github.com/jdholtz/pacman-venv/discussions/new/choose

@@ -71,7 +71,7 @@ add_necessary_files() {
 # download it
 install_packages() {
     local root_dir="${1}"
-    local packages=("pacman" "sed")
+    local packages=("filesystem" "sed")
     local pacman_opts=()
     [[ "${INTERACTIVE}" != 1 ]] && pacman_opts+=("--noconfirm")
 

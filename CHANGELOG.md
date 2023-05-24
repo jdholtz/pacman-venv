@@ -1,5 +1,16 @@
 # Changelog
 
+## Upcoming
+
+### Improvements
+- Improve virtual environment creation and reduce initial size
+    - Pacman is no longer installed inside the virtual environment upon creation,
+    only `filesystem` and `sed`
+
+### Bug Fixes
+- Fix commands prefixed with `sudo` not calling the virtual environment's shims
+
+
 ## 0.3 (2023-05-20)
 
 ### New Features
@@ -13,7 +24,6 @@
 
 ### Bug Fixes
 - Fix various packages not installing/uninstalling correctly (e.g. fish and gnupg)
-- Fix commands prefixed with `sudo` not calling the virtual environment's shims
 
 
 ## 0.2 (2023-05-17)

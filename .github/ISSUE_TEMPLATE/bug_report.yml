@@ -32,4 +32,4 @@ body:
   - type: textarea
     attributes:
       label: Additional context
-      description: Add any other context about the problem here
+      description: Add any other context about the problem here such as your shell, pacman version, etc.

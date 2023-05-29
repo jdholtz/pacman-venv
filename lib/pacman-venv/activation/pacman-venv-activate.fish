@@ -22,8 +22,9 @@ end
 # Store all the old values of the variables
 set -gx _PACMAN_VENV_OLD_PATH $PATH
 set -gx _PACMAN_VENV_OLD_PS1 $PS1
-set -gx _PACMAN_VENV_OLD_LD_LIBRARY_PATH $LD_LIBRARY_PATH
 set -gx _PACMAN_VENV_OLD_COMPLETE_PATH $fish_complete_path
+set -gx _PACMAN_VENV_OLD_LD_LIBRARY_PATH $LD_LIBRARY_PATH
+set -gx _PACMAN_VENV_OLD_XDG_DATA_DIRS $XDG_DATA_DIRS
 set -gx _PACMAN_VENV_OLD_PACMAN $PACMAN
 
 # Name of the virtual environment
@@ -39,6 +40,12 @@ set -p PATH "$_PACMAN_VENV/pacman-venv-shims" (create_path $PATH)
 
 # Add the virtual environment's completion paths
 set -p fish_complete_path (create_path $fish_complete_path)
+
+# Add the virtual environment's data directories. This is mainly here to provide
+# consistency between the different shell activation scripts. It is needed for
+# bash-completion.
+test -z "$XDG_DATA_DIRS"; and set --path XDG_DATA_DIRS /usr/share /usr/local/share
+set -gx -p XDG_DATA_DIRS (create_path $XDG_DATA_DIRS)
 
 # Unset the path creation function as it isn't needed anymore
 functions -e create_path
@@ -66,14 +73,16 @@ end
 function exit -d "Exit the pacman virtual environment"
     # Reset all variables to their old values
     set -gx PATH $_PACMAN_VENV_OLD_PATH
-    set -gx LD_LIBRARY_PATH $_PACMAN_VENV_OLD_LD_LIBRARY_PATH
     set -gx fish_complete_path $_PACMAN_VENV_OLD_COMPLETE_PATH
+    set -gx LD_LIBRARY_PATH $_PACMAN_VENV_OLD_LD_LIBRARY_PATH
+    set -gx XDG_DATA_DIRS $_PACMAN_VENV_OLD_XDG_DATA_DIRS
     set -gx PACMAN $_PACMAN_VENV_OLD_PACMAN
 
     # Unset all the temporary variables/functions
     set -e _PACMAN_VENV_OLD_PATH
-    set -e _PACMAN_VENV_OLD_LD_LIBRARY_PATH
     set -e _PACMAN_VENV_OLD_COMPLETE_PATH
+    set -e _PACMAN_VENV_OLD_LD_LIBRARY_PATH
+    set -e _PACMAN_VENV_OLD_XDG_DATA_DIRS
     set -e _PACMAN_VENV_OLD_PACMAN
     set -e _PACMAN_VENV
 

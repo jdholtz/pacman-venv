@@ -9,6 +9,7 @@
 - Improve virtual environment creation and reduce initial size
     - Pacman is no longer installed inside the virtual environment upon creation,
     only `filesystem` and `sed`
+- The XDG_DATA_DIRS environment variable is now respected inside the virtual environment
 
 ### Bug Fixes
 - Fix commands prefixed with `sudo` not calling the virtual environment's shims

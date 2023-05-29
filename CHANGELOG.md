@@ -1,6 +1,6 @@
 # Changelog
 
-## Upcoming
+## 0.4 (2023-05-29)
 
 ### New Features
 - Every shell will now look in the virtual environment for completions

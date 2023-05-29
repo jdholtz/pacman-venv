@@ -12,34 +12,35 @@ else if test -n "$_PACMAN_VENV"
 end
 
 # Prepend the pacman virtual environment directory to every
-# directory in PATH. Then, add the new path created to the
-# beginning of PATH. This ensures all paths are looked at in
-# the virtual environment before the system.
+# directory in the provided path.
 function create_path
-    set --path new_path "$_PACMAN_VENV/pacman-venv-shims"
-    for path in $PATH
-        set new_path "$new_path:$_PACMAN_VENV$path"
+    for path in $argv
+        echo $_PACMAN_VENV$path
     end
-
-    set -p PATH $new_path
 end
 
 # Store all the old values of the variables
 set -gx _PACMAN_VENV_OLD_PATH $PATH
 set -gx _PACMAN_VENV_OLD_PS1 $PS1
 set -gx _PACMAN_VENV_OLD_LD_LIBRARY_PATH $LD_LIBRARY_PATH
+set -gx _PACMAN_VENV_OLD_COMPLETE_PATH $fish_complete_path
 set -gx _PACMAN_VENV_OLD_PACMAN $PACMAN
 
 # Name of the virtual environment
 set _PACMAN_VENV (realpath (status filename))
 set -gx _PACMAN_VENV (dirname (dirname (dirname $_PACMAN_VENV)))
 
-# Set all the needed values for the virtual environment
-set --path LD_LIBRARY_PATH "$_PACMAN_VENV/lib:$LD_LIBRARY_PATH"
-set -gx LD_LIBRARY_PATH $LD_LIBRARY_PATH
-create_path
+# Point programs to look for libraries in the virtual environment first
+set -gx -p LD_LIBRARY_PATH "$_PACMAN_VENV/lib"
 
-# Unset the create_path function as it isn't needed anymore
+# The shims directory needs to be first in the PATH so it has priority
+# over every other path
+set -p PATH "$_PACMAN_VENV/pacman-venv-shims" (create_path $PATH)
+
+# Add the virtual environment's completion paths
+set -p fish_complete_path (create_path $fish_complete_path)
+
+# Unset the path creation function as it isn't needed anymore
 functions -e create_path
 
 # Makepkg uses this variable to execute its Pacman command.
@@ -66,11 +67,13 @@ function exit -d "Exit the pacman virtual environment"
     # Reset all variables to their old values
     set -gx PATH $_PACMAN_VENV_OLD_PATH
     set -gx LD_LIBRARY_PATH $_PACMAN_VENV_OLD_LD_LIBRARY_PATH
+    set -gx fish_complete_path $_PACMAN_VENV_OLD_COMPLETE_PATH
     set -gx PACMAN $_PACMAN_VENV_OLD_PACMAN
 
     # Unset all the temporary variables/functions
     set -e _PACMAN_VENV_OLD_PATH
     set -e _PACMAN_VENV_OLD_LD_LIBRARY_PATH
+    set -e _PACMAN_VENV_OLD_COMPLETE_PATH
     set -e _PACMAN_VENV_OLD_PACMAN
     set -e _PACMAN_VENV
 

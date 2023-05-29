@@ -2,6 +2,9 @@
 
 ## Upcoming
 
+### New Features
+- Every shell will now look in the virtual environment for completions
+
 ### Improvements
 - Improve virtual environment creation and reduce initial size
     - Pacman is no longer installed inside the virtual environment upon creation,

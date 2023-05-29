@@ -18,7 +18,7 @@ complete -c $progname -e
 complete -c $progname -f
 
 # Only add a dash to the completion if an argument is not currently being typed
-complete -c $progname -n '__fish_pacman_venv_no_dash' -a "-"
+complete -c $progname -n '__fish_pacman_venv_no_dash' -n '__fish_pacman_venv_no_opt' -a "-"
 
 complete -c $progname -l clear -f -n '__fish_pacman_venv_no_opt clear' -d 'Clear the destination before creating'
 complete -c $progname -s i -l interactive -n '__fish_pacman_venv_no_opt interactive' -d 'Ask for confirmation when installing the base packages' -x

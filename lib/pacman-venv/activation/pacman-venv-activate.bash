@@ -16,14 +16,18 @@ fi
 exit() {
     # Reset all variables to their old values
     PATH="${_PACMAN_VENV_OLD_PATH}"
+    FPATH="${_PACMAN_VENV_OLD_FPATH}"
     PS1="${_PACMAN_VENV_OLD_PS1}"
     LD_LIBRARY_PATH="${_PACMAN_VENV_OLD_LD_LIBRARY_PATH}"
+    XDG_DATA_DIRS="${_PACMAN_VENV_OLD_XDG_DATA_DIRS}"
     PACMAN="${_PACMAN_VENV_OLD_PACMAN}"
 
     # Unset all the temporary variables/functions
     unset _PACMAN_VENV_OLD_PATH
+    unset _PACMAN_VENV_OLD_FPATH
     unset _PACMAN_VENV_OLD_PS1
     unset _PACMAN_VENV_OLD_LD_LIBRARY_PATH
+    unset _PACMAN_VENV_OLD_XDG_DATA_DIRS
     unset _PACMAN_VENV_OLD_PACMAN
     unset _PACMAN_VENV
     unset -f exit deactivate
@@ -35,37 +39,6 @@ exit() {
 # Alias for exit
 deactivate() {
     exit
-}
-
-# Prepend the pacman virtual environment directory to every
-# directory in PATH. Then, add the new path created to the
-# beginning of PATH. This ensures all paths are looked at in
-# the virtual environment before the system.
-create_path() {
-    local read_array_flag="-a"
-    if [[ -n "$ZSH_VERSION" ]]; then
-        # The zsh shell uses -A instead of -a
-        read_array_flag="-A"
-
-        # Zsh starts arrays at 1 which is problematic for the code
-        # below, so ksh is emulated to make sure it works similar
-        # to Bash
-        emulate -L ksh
-    fi
-
-    # Split the PATH variable into an array
-    # shellcheck disable=SC2229
-    IFS=":" read -r "${read_array_flag}" path_array <<< "${PATH}"
-
-    # Add the shims directory to the beginning of the path
-    local new_path="${_PACMAN_VENV}/pacman-venv-shims"
-
-    # Prepend the PACMAN VENV to every directory in PATH
-    for path in "${path_array[@]}"; do
-        new_path="${new_path}:${_PACMAN_VENV}${path}"
-    done
-
-    echo "${new_path}"
 }
 
 # Different expansions need to be done if the shell is Bash vs. Zsh
@@ -81,10 +54,33 @@ get_file_name() {
     echo "${file_name}"
 }
 
+# Prepend the pacman virtual environment directory to every
+# directory in the provided path. This ensures all paths are
+# looked at in the virtual environment before the system.
+create_path() {
+    local original_path="${1}"
+
+    local read_array_flag="-a"
+    # The zsh shell uses -A instead of -a
+    [[ -n "$ZSH_VERSION" ]] && read_array_flag="-A"
+
+    # Split the PATH variable into an array
+    # shellcheck disable=SC2229
+    IFS=: read -r "${read_array_flag}" path_array <<< "${original_path}"
+
+    for path in "${path_array[@]}"; do
+        echo -n "${_PACMAN_VENV}${path}:"
+    done
+
+    echo "${original_path}"
+}
+
 # Store all the old values of the variables
 _PACMAN_VENV_OLD_PATH="${PATH}"
+_PACMAN_VENV_OLD_FPATH="${FPATH}"
 _PACMAN_VENV_OLD_PS1="${PS1}"
 _PACMAN_VENV_OLD_LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
+_PACMAN_VENV_OLD_XDG_DATA_DIRS="${XDG_DATA_DIRS}"
 _PACMAN_VENV_OLD_PACMAN="${PACMAN}"
 
 # Name of the virtual environment
@@ -92,12 +88,30 @@ _PACMAN_VENV="$(realpath "$(get_file_name)")"
 _PACMAN_VENV="$(dirname "$(dirname "$(dirname "${_PACMAN_VENV}")")")"
 export _PACMAN_VENV
 
-# Set all the needed values for the virtual environment
+# Point programs to look for libraries in the virtual environment first
 export LD_LIBRARY_PATH="${_PACMAN_VENV}/lib:${LD_LIBRARY_PATH}"
-PATH="$(create_path):${PATH}"
-PS1="[$(basename "${_PACMAN_VENV}")] ${PS1}"
+
+# The shims directory needs to be first in the PATH so it has priority
+# over every other path
+PATH="${_PACMAN_VENV}/pacman-venv-shims:$(create_path "${PATH}")"
 export PATH
+
+# Add Zsh completion directories to point to the virtual environment first. This
+# has no effect on Bash (FPATH is empty) so no check needs to be done.
+FPATH="$(create_path "${FPATH}")"
+export FPATH
+# Regenerate Zsh completion because we modified FPATH
+[[ -n "$ZSH_VERSION" ]] && compinit
+
+# Set the custom prompt
+PS1="[$(basename "${_PACMAN_VENV}")] ${PS1}"
 export PS1
+
+# Add the virtual environment's data directories. This is mainly here for Bash completion to look
+# in the virtual environment for completion functions
+XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+XDG_DATA_DIRS="$(create_path "${XDG_DATA_DIRS}")"
+export XDG_DATA_DIRS
 
 # Makepkg uses this variable to execute its Pacman command.
 # However, we need to override the default to use the --root flag,
@@ -105,7 +119,7 @@ export PS1
 export PACMAN="${_PACMAN_VENV}/pacman-venv-shims/pacman"
 
 # Unset the helper functions used to activate the environment
-unset -f create_path get_file_name
+unset -f get_file_name create_path
 
 # Forget past commands because the $PATH changed
 hash -r

@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
 _pacman() {
-    # Override pacman to execute with the root flag
-    PATH="${PATH#*:}" pacman --root "${_PACMAN_VENV}" "$@"
+    # Run pacman through unshare to enable use without sudo. Additionally, point various flags
+    # to the virtual environment instead of the root directory
+    PATH="${PATH#*:}" unshare --map-root-user -- pacman \
+        --cachedir "${_PACMAN_VENV}/var/cache/pacman/pkg" \
+        --hookdir "${_PACMAN_VENV}/etc/pacman.d/hooks" \
+        --root "${_PACMAN_VENV}" \
+        "$@"
 }
 
 _pacman "$@"

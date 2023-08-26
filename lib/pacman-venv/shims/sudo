@@ -3,9 +3,9 @@
 _sudo() {
     # Override sudo to preserve environment variables when called
 
-    # Sudo needs to be called with the absolute path here to both not loop
-    # infinitely by calling this file over and over as well as keep the same
-    # PATH (which is the strategy done by other shims). This is because commands
+    # Sudo needs to be called with the absolute path here to both not loop infinitely
+    # by continuously calling this file as well as keep the same PATH (other shims
+    # remove themselves from the PATH to avoid this issue). This is because commands
     # run with sudo should still be looked at in the shims directory first (e.g. pacman)
     /usr/bin/sudo -E "$@"
 }

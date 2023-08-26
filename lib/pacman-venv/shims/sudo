@@ -1,12 +1,38 @@
 #!/usr/bin/env bash
 
+# Check if the command can be executed with sudo in the virtual environment
+_command_valid() {
+    invalid_commands=("pacman" "yay")
+    cmd="$1"
+
+    for invalid_cmd in "${invalid_commands[@]}"; do
+        [[ "$cmd" == "$invalid_cmd" ]] && return 1
+    done
+
+    return 0
+}
+
 _sudo() {
-    # Override sudo to preserve environment variables when called
+    # Ensure the command being run with sudo will not mess with permissions in the
+    # virtual environment
+    for arg in "$@"; do
+        # Skip flags used for sudo
+        [[ "$arg" == "-"* ]] && continue
+
+        if _command_valid "$arg"; then
+            break
+        else
+            echo "Running '$arg' in a Pacman virtual environment is not allowed as it"\
+            "can mess with permissions"
+            exit 1
+        fi
+    done
 
     # Sudo needs to be called with the absolute path here to both not loop infinitely
     # by continuously calling this file as well as keep the same PATH (other shims
     # remove themselves from the PATH to avoid this issue). This is because commands
     # run with sudo should still be looked at in the shims directory first (e.g. pacman)
+    # The -E flag preserves environment variables, which is necessary for _PACMAN_VENV
     /usr/bin/sudo -E "$@"
 }
 

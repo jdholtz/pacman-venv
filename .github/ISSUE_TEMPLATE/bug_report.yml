@@ -6,6 +6,22 @@ body:
     attributes:
       value: |
         Thank you for taking the time to report a bug!
+  - type: input
+    attributes:
+      label: Version
+      description: Output of `pacman-venv --version`
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Shell
+      description: The shell you are using with pacman-venv
+      options:
+        - Bash
+        - Zsh
+        - Fish
+    validations:
+      required: true
   - type: textarea
     attributes:
       label: Description
@@ -27,9 +43,5 @@ body:
       description: A clear and concise description of what you expected to happen
   - type: textarea
     attributes:
-      label: Version
-      description: Output of `pacman-venv --version`, Pacman's version, and versions of any AUR helpers you are using
-  - type: textarea
-    attributes:
       label: Additional context
-      description: Add any other context about the problem here such as your shell, pacman version, etc.
+      description: Add any other context about the problem here such as your pacman version, AUR helper versions, etc.
